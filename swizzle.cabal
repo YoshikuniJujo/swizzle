@@ -37,11 +37,12 @@ library
       Data.Swizzle.Class.Pkg
       Data.Swizzle.Class.TH
       Data.Swizzle.Class.TH.Internal
-      Data.Swizzle.Instance.Tuple57OrMore
+      Data.Swizzle.Instance.Tuple58OrMore
       Data.Swizzle.Instance.TupleBetween27And30
       Data.Swizzle.Instance.TupleBetween31And40
-      Data.Swizzle.Instance.TupleBetween41And50
-      Data.Swizzle.Instance.TupleBetween51And56
+      Data.Swizzle.Instance.TupleBetween41And46
+      Data.Swizzle.Instance.TupleBetween47And52
+      Data.Swizzle.Instance.TupleBetween53And57
       Paths_swizzle
   autogen-modules:
       Paths_swizzle

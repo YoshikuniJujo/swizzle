@@ -1,3 +1,4 @@
+{-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE BlockArguments #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
@@ -6,7 +7,7 @@ module Data.Swizzle.TH (swizzle) where
 import Language.Haskell.TH
 import Language.Haskell.TH.Syntax
 import Data.Maybe
-import Data.List
+import Data.List qualified as L
 import Data.Char
 
 import Data.Swizzle.Class.Pkg
@@ -38,7 +39,7 @@ tupT :: [TypeQ] -> TypeQ
 tupT ts = foldl appT (tupleT $ length ts) ts
 
 unalphabet :: Char -> Int
-unalphabet c = fromJust (elemIndex c $ ("xyz" ++ reverse ['a' .. 'w'])) + 1
+unalphabet c = fromJust (L.elemIndex c $ ("xyz" ++ reverse ['a' .. 'w'])) + 1
 
 arrT :: TypeQ -> TypeQ -> TypeQ
 t1 `arrT` t2 = arrowT `appT` t1 `appT` t2
