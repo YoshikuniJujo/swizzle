@@ -4,7 +4,7 @@ github:              "YoshikuniJujo/swizzle"
 license:             BSD-3-Clause
 author:              "Yoshikuni Jujo"
 maintainer:          "yoshikuni.jujo@gmail.com"
-copyright:           "(c) 2024 Yoshikuni Jujo"
+copyright:           "(c) 2025 Yoshikuni Jujo"
 
 extra-source-files:
 - README.md
@@ -21,6 +21,7 @@ description:         Please see the README on GitHub at <https://github.com/Yosh
 
 dependencies:
 - base >= 4.7 && < 5
+- template-haskell
 
 ghc-options:
 - -Wall
@@ -35,17 +36,12 @@ ghc-options:
 
 library:
   source-dirs: src
-
-executables:
-  swizzle-exe:
-    main:                Main.hs
-    source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - swizzle
+  exposed-modules:
+    - Data.Curry
+    - Data.Curry.TH
+    - Data.Swizzle
+    - Data.Swizzle.TH
+    - Data.Swizzle.Class
 
 tests:
   swizzle-test:
