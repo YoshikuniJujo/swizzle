@@ -6,11 +6,17 @@ import Language.Haskell.TH
 
 crr :: Int -> DecsQ
 crr n = (\a b -> [a, b])
-	<$> crrSig n (take n $ (: "") <$> cycle ['a' .. 'z'])
-	<*> crrFun n (take n $ (: "") <$> cycle ("xyz" ++ reverse ['a' .. 'w']))
+	<$> crrSig n (take n $ cycle' ['a' .. 'z'])
+	<*> crrFun n (take n $ cycle' ("xyz" ++ reverse ['a' .. 'w']))
+
+cycle' :: [Char] -> [String]
+cycle' cs = go ((: "") <$> cs) ((: "") <$> cs)
+	where
+	go ws [] = let ws' = [ c : w | c <- cs, w <- ws ] in go ws' ws'
+	go ws (s : ss) = s : go ws ss
 
 crrSig :: Int -> [String] -> Q Dec
-crrSig n ss = newName `mapM` ss >>= \vs -> newName "r" >>= \r -> sigD (mkName $ "crr" ++ show n)
+crrSig n ss = newName `mapM` ss >>= \vs -> newName "rslt" >>= \r -> sigD (mkName $ "crr" ++ show n)
 	. foldr arrT (varT r) $ (tupT (varT <$> vs) `arrT` varT r) : (varT <$> vs)
 
 crrFun :: Int -> [String] -> Q Dec
@@ -22,11 +28,11 @@ crrFun n ss = newName "f" >>= \f -> newName `mapM` ss >>= \vs ->
 
 unc :: Int -> DecsQ
 unc n = (\a b -> [a, b])
-	<$> uncSig n (take n $ (: "") <$> cycle ['a' .. 'z'])
-	<*> uncFun n (take n $ (: "") <$> cycle ("xyz" ++ reverse ['a' .. 'w']))
+	<$> uncSig n (take n $ cycle' ['a' .. 'z'])
+	<*> uncFun n (take n $ cycle' ("xyz" ++ reverse ['a' .. 'w']))
 
 uncSig :: Int -> [String] -> Q Dec
-uncSig n ss = newName `mapM` ss >>= \vs -> newName "r" >>= \r -> sigD (mkName $ "unc" ++ show n)
+uncSig n ss = newName `mapM` ss >>= \vs -> newName "rslt" >>= \r -> sigD (mkName $ "unc" ++ show n)
 	$ (foldr arrT (varT r) $ varT <$> vs) `arrT` tupT (varT <$> vs) `arrT` varT r
 
 uncFun :: Int -> [String] -> Q Dec
