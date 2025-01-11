@@ -5,7 +5,7 @@ cabal-version: 2.2
 -- see: https://github.com/sol/hpack
 
 name:           swizzle
-version:        0.1.0.1
+version:        0.1.0.2
 synopsis:       Swizzle functions
 description:    Please see the README on GitHub at <https://github.com/YoshikuniJujo/swizzle#readme>
 category:       Data
@@ -28,11 +28,11 @@ source-repository head
 library
   exposed-modules:
       Data.Curry
-      Data.Curry.TH
       Data.Swizzle
       Data.Swizzle.TH
       Data.Swizzle.Class
   other-modules:
+      Data.Curry.TH
       Data.Swizzle.Class.Base
       Data.Swizzle.Class.Pkg
       Data.Swizzle.Class.TH
