@@ -9,7 +9,7 @@ nums :: (Int, Int, Int, Int, Int, Int, Int, Int, Int, Int)
 nums = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
 
 foo :: (Int, Int, Int, Int)
-foo = Swz.zyxw nums -- (3, 2, 1, 0)
+foo = Swz.zyxw nums -- (2, 1, 0, 3)
 
 foo2, foo3, foo4, foo5, foo9 :: Solo Int
 foo2 = Swz.z nums -- 2
@@ -53,4 +53,18 @@ alphaGreen = Swz.xz sample
 
 rgba :: (Red, Green, Blue, Alpha)
 rgba = Swz.yzwx sample
+```
+
+```haskell
+import Data.Curry
+import Data.Swizzle qualified as Swz
+
+flip13 :: (a -> b -> c -> r) -> c -> b -> a -> r
+flip13 f = crr3 $ unc3 f . Swz.zyx
+
+foo :: Int -> Int -> Int -> Int -> String
+foo x y z w = show x ++ show y ++ show z ++ show w
+
+bar :: String
+bar = flip13 foo 1 2 3 4 -- "3214"
 ```
