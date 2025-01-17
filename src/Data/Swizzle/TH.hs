@@ -8,16 +8,20 @@ import Language.Haskell.TH
 import Language.Haskell.TH.Syntax
 import Data.Maybe
 import Data.List qualified as L
+import Data.Bool
 import Data.Char
 
 import Data.Swizzle.Class.Pkg
 
-swizzle :: String -> DecsQ
-swizzle nm = sequence [mkSwizzleSig i nm, mkSwizzleFun nm]
+swizzle :: String -> String -> DecsQ
+swizzle pfx nm = sequence [mkSwizzleSig i pfx nm, mkSwizzleFun pfx nm]
 	where i = maximum $ unalphabet <$> nm
 
-mkSwizzleSig :: Int -> String -> Q Dec
-mkSwizzleSig i nm = sigD (mkName nm) . forallT [] (mkSwizzleSigContext i)
+mkFunName :: String -> String -> Name
+mkFunName pfx (c : cs) = mkName $ pfx ++ bool toUpper id (null pfx) c : cs
+
+mkSwizzleSig :: Int -> String -> String -> Q Dec
+mkSwizzleSig i pfx nm = sigD (mkFunName pfx nm) . forallT [] (mkSwizzleSigContext i)
 	$ varT (mkName "a") `arrT` mkSwizzleSigTup nm (mkName "a")
 
 mkSwizzleSigContext :: Int -> CxtQ
@@ -44,8 +48,8 @@ unalphabet c = fromJust (L.elemIndex c $ ("xyz" ++ reverse ['a' .. 'w'])) + 1
 arrT :: TypeQ -> TypeQ -> TypeQ
 t1 `arrT` t2 = arrowT `appT` t1 `appT` t2
 
-mkSwizzleFun :: String -> Q Dec
-mkSwizzleFun nm = newName "a" >>= \a -> funD (mkName nm) [
+mkSwizzleFun :: String -> String -> Q Dec
+mkSwizzleFun pfx nm = newName "a" >>= \a -> funD (mkFunName pfx nm) [
 	clause [varP a] (normalB $ mkSwizzleFunTup nm a) [] ]
 
 mkSwizzleFunTup :: String -> Name -> ExpQ
